@@ -46,9 +46,9 @@ export default function Title() {
   return (
     <TitleWrapper onClick={() => history.push('/')}>
       <Flex alignItems="center" style={{ justifyContent: 'space-between' }}>
-        <RowFixed>
-          <UniIcon id="link" onClick={() => history.push('/')}>
-            <img width={'24px'} src={Logo} alt="logo" />
+        <RowFixed align="center">
+          <UniIcon id="link" onClick={() => history.push('/')} height={'28px'}>
+            <img width={'24px'} height={'28px'} src={Logo} alt="logo" />
           </UniIcon>
           {!below1080 && (
             <img width={'84px'} style={{ marginLeft: '8px', marginTop: '0px' }} src={Wordmark} alt="logo" />
