@@ -124,14 +124,14 @@ function App() {
   return (
     <ApolloProvider client={client}>
       <AppWrapper>
-        <BannerWrapper>
+        {/* <BannerWrapper>
           <UrlBanner>
             {`info.uniswap.org is being deprecated on June 11th. Explore the new combined V2 and V3 analytics at `}
             <Link color="white" external href={'https://app.uniswap.org/explore'}>
               <Decorator>app.uniswap.org</Decorator>
             </Link>{' '}
           </UrlBanner>
-        </BannerWrapper>
+        </BannerWrapper> */}
         {showWarning && (
           <BannerWrapper>
             <WarningBanner>
