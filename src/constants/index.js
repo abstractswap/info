@@ -1,3 +1,6 @@
+export const BLOCK_EXPLORER_URL = 'https://explorer.zero.network'
+export const BLOCK_EXPLORER_NAME = 'ZERϴ Block Explorer'
+
 export const FACTORY_ADDRESS = '0x1B4427e212475B12e62f0f142b8AfEf3BC18B559'
 
 export const BUNDLE_ID = '1'

@@ -8,7 +8,7 @@ import { GET_BLOCK, GET_BLOCKS, SHARE_VALUE } from '../apollo/queries'
 import { Text } from 'rebass'
 import _Decimal from 'decimal.js-light'
 import toFormat from 'toformat'
-import { timeframeOptions } from '../constants'
+import { BLOCK_EXPLORER_URL, timeframeOptions } from '../constants'
 import Numeral from 'numeral'
 
 // format libraries
@@ -303,10 +303,10 @@ export const setThemeColor = (theme) => document.documentElement.style.setProper
 export const Big = (number) => new BigNumber(number)
 
 export const urls = {
-  showTransaction: (tx) => `https://etherscan.io/tx/${tx}/`,
-  showAddress: (address) => `https://www.etherscan.io/address/${address}/`,
-  showToken: (address) => `https://www.etherscan.io/token/${address}/`,
-  showBlock: (block) => `https://etherscan.io/block/${block}/`,
+  showTransaction: (tx) => `${BLOCK_EXPLORER_URL}/tx/${tx}/`,
+  showAddress: (address) => `${BLOCK_EXPLORER_URL}/address/${address}/`,
+  showToken: (address) => `${BLOCK_EXPLORER_URL}/token/${address}/`,
+  showBlock: (block) => `${BLOCK_EXPLORER_URL}/block/${block}/`,
 }
 
 export const formatTime = (unix) => {
