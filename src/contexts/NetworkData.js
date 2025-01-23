@@ -4,7 +4,7 @@ import { NETWORKS_LIST, ZeroNetworkNetworkInfo } from '../constants/networks'
 const UPDATE_CHAIN = 'UPDATE_CHAIN'
 
 const INITIAL_STATE = {
-  networksData: [ZeroNetworkNetworkInfo],
+  activeNetwork: ZeroNetworkNetworkInfo,
 }
 
 const NetworkDataContext = createContext()
@@ -20,7 +20,7 @@ function reducer(state, { type, payload }) {
       const newNetworkData = NETWORKS_LIST.find(network => network.chainId === newChain.chainId)
       return {
         ...state,
-        networksData: newNetworkData ? [newNetworkData] : INITIAL_STATE.networksData,
+        activeNetwork: newNetworkData ? newNetworkData : INITIAL_STATE.activeNetwork,
       }
     }
 
@@ -32,7 +32,8 @@ function reducer(state, { type, payload }) {
 
 export default function Provider({ children }) {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
-  const updateChain = useCallback(newChain => {
+  const updateActiveNetwork = useCallback(newChain => {
+    console.log("updating")
     dispatch({
       type: UPDATE_CHAIN,
       payload: {
@@ -47,10 +48,10 @@ export default function Provider({ children }) {
         () => [
           state,
           {
-            updateChain,
+            updateActiveNetwork,
           },
         ],
-        [state, updateChain]
+        [state, updateActiveNetwork]
       )}
     >
       {children}
@@ -59,6 +60,6 @@ export default function Provider({ children }) {
 }
 
 export function useNetworksData() {
-  const [{ networksData }, { updateChain }] = useNetworksDataContext()
-  return [networksData.filter(Boolean).length ? networksData : [NETWORKS_LIST[0]], updateChain]
+  const [{ activeNetwork }, { updateActiveNetwork }] = useNetworksDataContext()
+  return [activeNetwork ?? NETWORKS_LIST[0], updateActiveNetwork]
 }

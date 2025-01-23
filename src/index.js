@@ -42,7 +42,9 @@ function ContextProviders({ children }) {
           <GlobalDataContextProvider>
             <PairDataContextProvider>
               <UserContextProvider>
-                <NetworkDataContextProvider>{children}</NetworkDataContextProvider>
+                <NetworkDataContextProvider>
+                  {children}
+                </NetworkDataContextProvider>
               </UserContextProvider>
             </PairDataContextProvider>
           </GlobalDataContextProvider>

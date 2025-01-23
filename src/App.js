@@ -99,19 +99,19 @@ const Decorator = styled.span`
  * Wrap the component with the header and sidebar pinned tab
  */
 const LayoutWrapper = ({ children, savedOpen, setSavedOpen }) => {
-  const [, updateChain] = useNetworksData()
+  const [, updateActiveNetwork] = useNetworksData()
   const { networkID } = useParams()
   useEffect(() => {
     if (!networkID) {
-      updateChain(ZeroNetworkNetworkInfo)
+      updateActiveNetwork(ZeroNetworkNetworkInfo)
     } else {
       NETWORKS_LIST.map((n) => {
         if (networkID === n.route.toLocaleLowerCase()) {
-          updateChain(n)
+          updateActiveNetwork(n)
         }
       })
     }
-  }, [networkID, updateChain])
+  }, [networkID, updateActiveNetwork])
   return (
     <>
       <ContentWrapper open={savedOpen}>
