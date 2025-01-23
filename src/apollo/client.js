@@ -1,14 +1,28 @@
 import { ApolloClient } from 'apollo-client'
 import { InMemoryCache } from 'apollo-cache-inmemory'
 import { HttpLink } from 'apollo-link-http'
+import { getSubgraphLink } from '../constants/networks'
 
-export const client = new ApolloClient({
-  link: new HttpLink({
-    uri: 'https://graph-node.internal.reservoir.tools/subgraphs/name/zero/v2-subgraph',
-  }),
-  cache: new InMemoryCache(),
-  shouldBatch: true,
-})
+// export const client = new ApolloClient({
+//   link: new HttpLink({
+//     uri: 'https://graph-node.internal.reservoir.tools/subgraphs/name/zero/v2-subgraph',
+//   }),
+//   cache: new InMemoryCache(),
+//   shouldBatch: true,
+// })
+
+export function client(url) {
+  console.log("fetching " + url)
+  return new ApolloClient({
+    link: new HttpLink({
+      uri: url ?? getSubgraphLink('zero'),
+    }),
+    cache: new InMemoryCache(),
+    shouldBatch: true,
+  })
+}
+
+
 
 export const healthClient = new ApolloClient({
   link: new HttpLink({

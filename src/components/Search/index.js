@@ -21,6 +21,8 @@ import { TYPE } from '../../Theme'
 import { updateNameData } from '../../utils/data'
 import { useParams } from 'react-router-dom'
 
+import { useNetworksData } from '../../contexts/NetworkData'
+
 const Container = styled.div`
   height: 48px;
   z-index: 30;
@@ -184,11 +186,13 @@ export const Search = ({ small = false }) => {
   const [searchedTokens, setSearchedTokens] = useState([])
   const [searchedPairs, setSearchedPairs] = useState([])
 
+  const [activeNetwork,] = useNetworksData()
+
   useEffect(() => {
     async function fetchData() {
       try {
         if (value?.length > 0) {
-          let tokens = await client.query({
+          let tokens = await client(activeNetwork.client).query({
             query: TOKEN_SEARCH,
             variables: {
               value: value ? value.toUpperCase() : '',
@@ -196,7 +200,7 @@ export const Search = ({ small = false }) => {
             },
           })
 
-          let pairs = await client.query({
+          let pairs = await client(activeNetwork.client).query({
             query: PAIR_SEARCH,
             variables: {
               tokens: tokens.data.asSymbol?.map((t) => t.id),
@@ -217,7 +221,7 @@ export const Search = ({ small = false }) => {
       }
     }
     fetchData()
-  }, [value])
+  }, [value, activeNetwork])
 
   function escapeRegExp(string) {
     return string.replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // $& means the whole matched string

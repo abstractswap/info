@@ -5,10 +5,10 @@ import Title from '../Title'
 import { BasicLink } from '../Link'
 import { useMedia } from 'react-use'
 import { transparentize } from 'polished'
-import { TYPE } from '../../Theme'
+// import { TYPE } from '../../Theme'
 import { withRouter, useParams } from 'react-router-dom'
 import { TrendingUp, List, PieChart, Disc } from 'react-feather'
-import { useSessionStart } from '../../contexts/Application'
+// import { useSessionStart } from '../../contexts/Application'
 import { useDarkModeManager } from '../../contexts/LocalStorage'
 import Toggle from '../Toggle'
 import NetworkDropdown from '../NetworkDropdown'
@@ -75,36 +75,36 @@ const MobileWrapper = styled.div`
 //   }
 // `
 
-const Polling = styled.div`
-  position: fixed;
-  display: flex;
-  left: 0;
-  bottom: 0;
-  padding: 1rem;
-  color: white;
-  opacity: 0.4;
-  transition: opacity 0.25s ease;
-  :hover {
-    opacity: 1;
-  }
-`
-const PollingDot = styled.div`
-  width: 8px;
-  height: 8px;
-  min-height: 8px;
-  min-width: 8px;
-  margin-right: 0.5rem;
-  margin-top: 3px;
-  border-radius: 50%;
-  background-color: ${({ theme }) => theme.green1};
-`
+// const Polling = styled.div`
+//   position: fixed;
+//   display: flex;
+//   left: 0;
+//   bottom: 0;
+//   padding: 1rem;
+//   color: white;
+//   opacity: 0.4;
+//   transition: opacity 0.25s ease;
+//   :hover {
+//     opacity: 1;
+//   }
+// `
+// const PollingDot = styled.div`
+//   width: 8px;
+//   height: 8px;
+//   min-height: 8px;
+//   min-width: 8px;
+//   margin-right: 0.5rem;
+//   margin-top: 3px;
+//   border-radius: 50%;
+//   background-color: ${({ theme }) => theme.green1};
+// `
 
 function SideNav({ history }) {
   const below1080 = useMedia('(max-width: 1080px)')
 
-  const below1180 = useMedia('(max-width: 1180px)')
+  // const below1180 = useMedia('(max-width: 1180px)')
 
-  const seconds = useSessionStart()
+  // const seconds = useSessionStart()
 
   const [isDark, toggleDarkMode] = useDarkModeManager()
 
@@ -193,7 +193,7 @@ function SideNav({ history }) {
             </HeaderText> */}
             <Toggle isActive={isDark} toggle={toggleDarkMode} />
           </AutoColumn>
-          {!below1180 && (
+          {/* {!below1180 && (
             <Polling style={{ marginLeft: '.5rem' }}>
               <PollingDot />
               <a href="/" style={{ color: 'white' }}>
@@ -202,7 +202,7 @@ function SideNav({ history }) {
                 </TYPE.small>
               </a>
             </Polling>
-          )}
+          )} */}
         </DesktopWrapper>
       ) : (
         <MobileWrapper>

@@ -231,7 +231,7 @@ const getTopTokens = async (ethPrice, ethPriceOld) => {
     // need to get the top tokens by liquidity by need token day datas
     const currentDate = parseInt(Date.now() / 86400 / 1000) * 86400 - 86400
 
-    let tokenids = await client.query({
+    let tokenids = await client().query({
       query: TOKEN_TOP_DAY_DATAS,
       fetchPolicy: 'network-only',
       variables: { date: currentDate },
@@ -242,17 +242,17 @@ const getTopTokens = async (ethPrice, ethPriceOld) => {
       return accum
     }, [])
 
-    let current = await client.query({
+    let current = await client().query({
       query: TOKENS_HISTORICAL_BULK(ids),
       fetchPolicy: 'cache-first',
     })
 
-    let oneDayResult = await client.query({
+    let oneDayResult = await client().query({
       query: TOKENS_HISTORICAL_BULK(ids, oneDayBlock),
       fetchPolicy: 'cache-first',
     })
 
-    let twoDayResult = await client.query({
+    let twoDayResult = await client().query({
       query: TOKENS_HISTORICAL_BULK(ids, twoDayBlock),
       fetchPolicy: 'cache-first',
     })
@@ -278,14 +278,14 @@ const getTopTokens = async (ethPrice, ethPriceOld) => {
 
         // catch the case where token wasnt in top list in previous days
         if (!oneDayHistory) {
-          let oneDayResult = await client.query({
+          let oneDayResult = await client().query({
             query: TOKEN_DATA(token.id, oneDayBlock),
             fetchPolicy: 'cache-first',
           })
           oneDayHistory = oneDayResult.data.tokens[0]
         }
         if (!twoDayHistory) {
-          let twoDayResult = await client.query({
+          let twoDayResult = await client().query({
             query: TOKEN_DATA(token.id, twoDayBlock),
             fetchPolicy: 'cache-first',
           })
@@ -337,7 +337,7 @@ const getTopTokens = async (ethPrice, ethPriceOld) => {
 
         // HOTFIX for Aave
         if (data.id === '0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9') {
-          const aaveData = await client.query({
+          const aaveData = await client().query({
             query: PAIR_DATA('0xdfc14d2af169b0d36c4eff567ada9b2e0cae044f'),
             fetchPolicy: 'cache-first',
           })
@@ -377,21 +377,21 @@ const getTokenData = async (address, ethPrice, ethPriceOld) => {
 
   try {
     // fetch all current and historical data
-    let result = await client.query({
+    let result = await client().query({
       query: TOKEN_DATA(address),
       fetchPolicy: 'cache-first',
     })
     data = result?.data?.tokens?.[0]
 
     // get results from 24 hours in past
-    let oneDayResult = await client.query({
+    let oneDayResult = await client().query({
       query: TOKEN_DATA(address, oneDayBlock),
       fetchPolicy: 'cache-first',
     })
     oneDayData = oneDayResult.data.tokens[0]
 
     // get results from 48 hours in past
-    let twoDayResult = await client.query({
+    let twoDayResult = await client().query({
       query: TOKEN_DATA(address, twoDayBlock),
       fetchPolicy: 'cache-first',
     })
@@ -399,14 +399,14 @@ const getTokenData = async (address, ethPrice, ethPriceOld) => {
 
     // catch the case where token wasnt in top list in previous days
     if (!oneDayData) {
-      let oneDayResult = await client.query({
+      let oneDayResult = await client().query({
         query: TOKEN_DATA(address, oneDayBlock),
         fetchPolicy: 'cache-first',
       })
       oneDayData = oneDayResult.data.tokens[0]
     }
     if (!twoDayData) {
-      let twoDayResult = await client.query({
+      let twoDayResult = await client().query({
         query: TOKEN_DATA(address, twoDayBlock),
         fetchPolicy: 'cache-first',
       })
@@ -473,7 +473,7 @@ const getTokenData = async (address, ethPrice, ethPriceOld) => {
 
     // HOTFIX for Aave
     if (data.id === '0x7fc66500c84a76ad7e9c93437bfc5ac33e2ddae9') {
-      const aaveData = await client.query({
+      const aaveData = await client().query({
         query: PAIR_DATA('0xdfc14d2af169b0d36c4eff567ada9b2e0cae044f'),
         fetchPolicy: 'cache-first',
       })
@@ -491,7 +491,7 @@ const getTokenData = async (address, ethPrice, ethPriceOld) => {
 const getTokenTransactions = async (allPairsFormatted) => {
   const transactions = {}
   try {
-    let result = await client.query({
+    let result = await client().query({
       query: FILTERED_TRANSACTIONS,
       variables: {
         allPairs: allPairsFormatted,
@@ -510,7 +510,7 @@ const getTokenTransactions = async (allPairsFormatted) => {
 const getTokenPairs = async (tokenAddress) => {
   try {
     // fetch all current and historical data
-    let result = await client.query({
+    let result = await client().query({
       query: TOKEN_DATA(tokenAddress),
       fetchPolicy: 'cache-first',
     })
@@ -552,8 +552,8 @@ const getIntervalTokenData = async (tokenAddress, startTime, interval = 3600, la
         return parseFloat(b.number) <= parseFloat(latestBlock)
       })
     }
-
-    let result = await splitQuery(PRICES_BY_BLOCK, client, [tokenAddress], blocks, 50)
+    const localClient = client()
+    let result = await splitQuery(PRICES_BY_BLOCK, localClient, [tokenAddress], blocks, 50)
 
     // format token ETH price results
     let values = []
@@ -607,7 +607,7 @@ const getTokenChartData = async (tokenAddress) => {
     let allFound = false
     let skip = 0
     while (!allFound) {
-      let result = await client.query({
+      let result = await client().query({
         query: TOKEN_CHART,
         variables: {
           tokenAddr: tokenAddress,

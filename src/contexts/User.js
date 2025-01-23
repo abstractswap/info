@@ -166,7 +166,7 @@ export function useUserTransactions(account) {
   useEffect(() => {
     async function fetchData(account) {
       try {
-        let result = await client.query({
+        let result = await client().query({
           query: USER_TRANSACTIONS,
           variables: {
             user: account,
@@ -204,7 +204,7 @@ export function useUserSnapshots(account) {
         let allResults = []
         let found = false
         while (!found) {
-          let result = await client.query({
+          let result = await client().query({
             query: USER_HISTORY,
             variables: {
               skip: skip,
@@ -363,7 +363,7 @@ export function useUserLiquidityChart(account) {
       // get all day datas where date is in this list, and pair is in pair list
       let {
         data: { pairDayDatas },
-      } = await client.query({
+      } = await client().query({
         query: PAIR_DAY_DATA_BULK(pairs, startDateTimestamp),
       })
 
@@ -420,7 +420,7 @@ export function useUserLiquidityChart(account) {
               totalUSD +
               (ownershipPerPair[dayData.pairAddress]
                 ? (parseFloat(ownershipPerPair[dayData.pairAddress].lpTokenBalance) / parseFloat(dayData.totalSupply)) *
-                  parseFloat(dayData.reserveUSD)
+                parseFloat(dayData.reserveUSD)
                 : 0))
           } else {
             return totalUSD
@@ -453,7 +453,7 @@ export function useUserPositions(account) {
   useEffect(() => {
     async function fetchData(account) {
       try {
-        let result = await client.query({
+        let result = await client().query({
           query: USER_POSITIONS,
           variables: {
             user: account,

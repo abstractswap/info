@@ -99,8 +99,10 @@ const Decorator = styled.span`
  * Wrap the component with the header and sidebar pinned tab
  */
 const LayoutWrapper = ({ children, savedOpen, setSavedOpen }) => {
-  const [, updateActiveNetwork] = useNetworksData()
+  const [activeNetwork, updateActiveNetwork] = useNetworksData()
   const { networkID } = useParams()
+
+  console.log({ activeNetwork })
   useEffect(() => {
     if (!networkID) {
       updateActiveNetwork(ZeroNetworkNetworkInfo)

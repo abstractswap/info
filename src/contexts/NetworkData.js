@@ -33,7 +33,6 @@ function reducer(state, { type, payload }) {
 export default function Provider({ children }) {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
   const updateActiveNetwork = useCallback(newChain => {
-    console.log("updating")
     dispatch({
       type: UPDATE_CHAIN,
       payload: {

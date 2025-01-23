@@ -54,7 +54,7 @@ async function getPrincipalForUserPerPair(user: string, pairAddress: string) {
   let amount0 = 0
   let amount1 = 0
   // get all minst and burns to get principal amounts
-  const results = await client.query({
+  const results = await client().query({
     query: USER_MINTS_BUNRS_PER_PAIR,
     variables: {
       user,

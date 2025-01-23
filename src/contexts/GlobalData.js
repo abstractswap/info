@@ -22,6 +22,7 @@ import {
 import weekOfYear from 'dayjs/plugin/weekOfYear'
 import { useAllPairData } from './PairData'
 import { useTokenChartDataCombined } from './TokenData'
+import { useNetworksData } from './NetworkData'
 const UPDATE = 'UPDATE'
 const UPDATE_TXNS = 'UPDATE_TXNS'
 const UPDATE_CHART = 'UPDATE_CHART'
@@ -220,11 +221,13 @@ export default function Provider({ children }) {
  * @param {*} oldEthPrice
  */
 
-async function getGlobalData(ethPrice, oldEthPrice) {
+async function getGlobalData(ethPrice, oldEthPrice, activeNetwork) {
   // data for each day , historic data used for % changes
   let data = {}
   let oneDayData = {}
   let twoDayData = {}
+
+  console.log({ activeNetwork })
 
   try {
     // get timestamps for the days
@@ -243,32 +246,32 @@ async function getGlobalData(ethPrice, oldEthPrice) {
     ])
 
     // fetch the global data
-    let result = await client.query({
+    let result = await client(activeNetwork.client).query({
       query: GLOBAL_DATA(),
       fetchPolicy: 'cache-first',
     })
     data = result.data.uniswapFactories[0]
 
     // fetch the historical data
-    let oneDayResult = await client.query({
+    let oneDayResult = await client(activeNetwork.client).query({
       query: GLOBAL_DATA(oneDayBlock?.number),
       fetchPolicy: 'cache-first',
     })
     oneDayData = oneDayResult.data.uniswapFactories[0]
 
-    let twoDayResult = await client.query({
+    let twoDayResult = await client(activeNetwork.client).query({
       query: GLOBAL_DATA(twoDayBlock?.number),
       fetchPolicy: 'cache-first',
     })
     twoDayData = twoDayResult.data.uniswapFactories[0]
 
-    let oneWeekResult = await client.query({
+    let oneWeekResult = await client(activeNetwork.client).query({
       query: GLOBAL_DATA(oneWeekBlock?.number),
       fetchPolicy: 'cache-first',
     })
     const oneWeekData = oneWeekResult.data.uniswapFactories[0]
 
-    let twoWeekResult = await client.query({
+    let twoWeekResult = await client(activeNetwork.client).query({
       query: GLOBAL_DATA(twoWeekBlock?.number),
       fetchPolicy: 'cache-first',
     })
@@ -324,7 +327,7 @@ async function getGlobalData(ethPrice, oldEthPrice) {
 
 let checked = false
 
-const getChartData = async (oldestDateToFetch, offsetData) => {
+const getChartData = async (oldestDateToFetch, offsetData, activeNetwork) => {
   let data = []
   let weeklyData = []
   const utcEndTime = dayjs.utc()
@@ -333,7 +336,7 @@ const getChartData = async (oldestDateToFetch, offsetData) => {
 
   try {
     while (!allFound) {
-      let result = await client.query({
+      let result = await client(activeNetwork.client).query({
         query: GLOBAL_CHART,
         variables: {
           startTime: oldestDateToFetch,
@@ -425,13 +428,14 @@ const getChartData = async (oldestDateToFetch, offsetData) => {
 }
 
 /**
+ * 
  * Get and format transactions for global page
  */
-const getGlobalTransactions = async () => {
+const getGlobalTransactions = async (activeNetwork) => {
   let transactions = {}
 
   try {
-    let result = await client.query({
+    let result = await client(activeNetwork.client).query({
       query: GLOBAL_TXNS,
       fetchPolicy: 'cache-first',
     })
@@ -467,7 +471,7 @@ const getGlobalTransactions = async () => {
 /**
  * Gets the current price  of ETH, 24 hour price, and % change between them
  */
-const getEthPrice = async () => {
+const getEthPrice = async (activeNetwork) => {
   const utcCurrentTime = dayjs()
   const utcOneDayBack = utcCurrentTime.subtract(1, 'day').startOf('minute').unix()
 
@@ -477,11 +481,11 @@ const getEthPrice = async () => {
 
   try {
     let oneDayBlock = await getBlockFromTimestamp(utcOneDayBack)
-    let result = await client.query({
+    let result = await client(activeNetwork.client).query({
       query: ETH_PRICE(),
       fetchPolicy: 'cache-first',
     })
-    let resultOneDay = await client.query({
+    let resultOneDay = await client(activeNetwork.client).query({
       query: ETH_PRICE(oneDayBlock),
       fetchPolicy: 'cache-first',
     })
@@ -503,13 +507,13 @@ const TOKENS_TO_FETCH = 500
 /**
  * Loop through every pair on uniswap, used for search
  */
-async function getAllPairsOnUniswap() {
+async function getAllPairsOnUniswap(activeNetwork) {
   try {
     let allFound = false
     let pairs = []
     let skipCount = 0
     while (!allFound) {
-      let result = await client.query({
+      let result = await client(activeNetwork.client).query({
         query: ALL_PAIRS,
         variables: {
           skip: skipCount,
@@ -531,13 +535,13 @@ async function getAllPairsOnUniswap() {
 /**
  * Loop through every token on uniswap, used for search
  */
-async function getAllTokensOnUniswap() {
+async function getAllTokensOnUniswap(activeNetwork) {
   try {
     let allFound = false
     let skipCount = 0
     let tokens = []
     while (!allFound) {
-      let result = await client.query({
+      let result = await client(activeNetwork.client).query({
         query: ALL_TOKENS,
         variables: {
           skip: skipCount,
@@ -566,23 +570,26 @@ export function useGlobalData() {
   const data = state?.globalData
 
   // const combinedVolume = useTokenDataCombined(offsetVolumes)
+  const [activeNetwork,] = useNetworksData()
 
+  console.log("and in global data?")
+  console.log({ activeNetwork })
   useEffect(() => {
     async function fetchData() {
-      let globalData = await getGlobalData(ethPrice, oldEthPrice)
+      let globalData = await getGlobalData(ethPrice, oldEthPrice, activeNetwork)
 
       globalData && update(globalData)
 
-      let allPairs = await getAllPairsOnUniswap()
+      let allPairs = await getAllPairsOnUniswap(activeNetwork)
       updateAllPairsInUniswap(allPairs)
 
-      let allTokens = await getAllTokensOnUniswap()
+      let allTokens = await getAllTokensOnUniswap(activeNetwork)
       updateAllTokensInUniswap(allTokens)
     }
     if (!data && ethPrice && oldEthPrice) {
       fetchData()
     }
-  }, [ethPrice, oldEthPrice, update, data, updateAllPairsInUniswap, updateAllTokensInUniswap])
+  }, [ethPrice, oldEthPrice, update, data, updateAllPairsInUniswap, updateAllTokensInUniswap, activeNetwork])
 
   return data || {}
 }
@@ -612,20 +619,20 @@ export function useGlobalChartData() {
   // fix for rebass tokens
 
   const combinedData = useTokenChartDataCombined(offsetVolumes)
-
+  const [activeNetwork,] = useNetworksData()
   /**
    * Fetch data if none fetched or older data is needed
    */
   useEffect(() => {
     async function fetchData() {
       // historical stuff for chart
-      let [newChartData, newWeeklyData] = await getChartData(oldestDateFetch, combinedData)
+      let [newChartData, newWeeklyData] = await getChartData(oldestDateFetch, combinedData, activeNetwork)
       updateChart(newChartData, newWeeklyData)
     }
     if (oldestDateFetch && !(chartDataDaily && chartDataWeekly) && combinedData) {
       fetchData()
     }
-  }, [chartDataDaily, chartDataWeekly, combinedData, oldestDateFetch, updateChart])
+  }, [chartDataDaily, chartDataWeekly, combinedData, oldestDateFetch, updateChart, activeNetwork])
 
   return [chartDataDaily, chartDataWeekly]
 }
@@ -633,15 +640,16 @@ export function useGlobalChartData() {
 export function useGlobalTransactions() {
   const [state, { updateTransactions }] = useGlobalDataContext()
   const transactions = state?.transactions
+  const [activeNetwork,] = useNetworksData()
   useEffect(() => {
     async function fetchData() {
       if (!transactions) {
-        let txns = await getGlobalTransactions()
+        let txns = await getGlobalTransactions(activeNetwork)
         updateTransactions(txns)
       }
     }
     fetchData()
-  }, [updateTransactions, transactions])
+  }, [updateTransactions, transactions, activeNetwork])
   return transactions
 }
 
@@ -649,15 +657,16 @@ export function useEthPrice() {
   const [state, { updateEthPrice }] = useGlobalDataContext()
   const ethPrice = state?.[ETH_PRICE_KEY]
   const ethPriceOld = state?.['oneDayPrice']
+  const [activeNetwork,] = useNetworksData()
   useEffect(() => {
     async function checkForEthPrice() {
       if (!ethPrice) {
-        let [newPrice, oneDayPrice, priceChange] = await getEthPrice()
+        let [newPrice, oneDayPrice, priceChange] = await getEthPrice(activeNetwork)
         updateEthPrice(newPrice, oneDayPrice, priceChange)
       }
     }
     checkForEthPrice()
-  }, [ethPrice, updateEthPrice])
+  }, [ethPrice, updateEthPrice, activeNetwork])
 
   return [ethPrice, ethPriceOld]
 }
@@ -685,6 +694,7 @@ export function useTopLps() {
   let topLps = state?.topLps
 
   const allPairs = useAllPairData()
+  const [activeNetwork,] = useNetworksData()
 
   useEffect(() => {
     async function fetchData() {
@@ -698,7 +708,7 @@ export function useTopLps() {
         topPairs.map(async (pair) => {
           // for each one, fetch top LPs
           try {
-            const { data: results } = await client.query({
+            const { data: results } = await client(activeNetwork.client).query({
               query: TOP_LPS_PER_PAIRS,
               variables: {
                 pair: pair.toString(),
@@ -708,7 +718,7 @@ export function useTopLps() {
             if (results) {
               return results.liquidityPositions
             }
-          } catch (e) {}
+          } catch (e) { }
         })
       )
 
@@ -740,7 +750,7 @@ export function useTopLps() {
     if (!topLps && allPairs && Object.keys(allPairs).length > 0) {
       fetchData()
     }
-  })
+  }, [activeNetwork, allPairs, topLps, updateTopLps])
 
   return topLps
 }

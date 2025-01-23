@@ -125,61 +125,61 @@ const StyledInternalLink = styled(Link)`
 
 
 export default function NetworkDropdown() {
-    const [activeNetwork,] = useNetworksData()
-    const [showMenu, setShowMenu] = useState(false)
+  const [activeNetwork,] = useNetworksData()
+  const [showMenu, setShowMenu] = useState(false)
 
-    const node = useRef(null)
-    useOnClickOutside(node, () => setShowMenu(false))
+  const node = useRef(null)
+  useOnClickOutside(node, () => setShowMenu(false))
 
-    return (
-        <Container ref={node}>
-            <Wrapper onClick={() => setShowMenu(!showMenu)}>
-                <RowFixed>
-                    <LogoWrapper src={activeNetwork.imageURL} />
-                    <Text fontSize="14px" color={'white'} ml="8px" mt="-2px" mr="2px" style={{ whiteSpace: 'nowrap' }}>
-                        {activeNetwork.name}
-                    </Text>
-                    {[/*add L1 network*/].includes(
-                        activeNetwork,
-                    ) ? null : (
-                        <Badge $bgColor={activeNetwork.primaryColor} style={{ margin: '0 4px' }}>
-                            L2
-                        </Badge>
-                    )}
-                    <ChevronDown size="20px" />
-                </RowFixed>
-            </Wrapper>
-            {showMenu && (
-                <FlyOut>
-                    <AutoColumn $gap="16px">
-                        <Text color={'white'} fontWeight={600} fontSize="16px">
-                            Select network
-                        </Text>
-                        {NETWORKS_LIST.map((n) => {
-                            return (
-                                <StyledInternalLink key={n.id} to={`${n === ZeroNetworkNetworkInfo ? '' : '/' + n.route}/home`}>
-                                    <NetworkRow
-                                        onClick={() => {
-                                            setShowMenu(false)
-                                        }}
-                                        active={activeNetwork.id === n.id}
-                                    >
-                                        <RowFixed>
-                                            <LogaContainer>
-                                                <LogoWrapper src={n.imageURL} />
-                                                {activeNetwork.id === n.id && <GreenDot />}
-                                            </LogaContainer>
-                                            <Text ml="12px" color={'white'}>
-                                                {n.name}
-                                            </Text>
-                                        </RowFixed>
-                                    </NetworkRow>
-                                </StyledInternalLink>
-                            )
-                        })}
-                    </AutoColumn>
-                </FlyOut>
-            )}
-        </Container>
-    )
+  return (
+    <Container ref={node}>
+      <Wrapper onClick={() => setShowMenu(!showMenu)}>
+        <RowFixed>
+          <LogoWrapper src={activeNetwork.imageURL} />
+          <Text fontSize="14px" color={'white'} ml="8px" mt="-2px" mr="2px" style={{ whiteSpace: 'nowrap' }}>
+            {activeNetwork.name}
+          </Text>
+          {[/*add L1 network*/].includes(
+            activeNetwork,
+          ) ? null : (
+            <Badge $bgColor={activeNetwork.primaryColor} style={{ margin: '0 4px' }}>
+              L2
+            </Badge>
+          )}
+          <ChevronDown size="20px" />
+        </RowFixed>
+      </Wrapper>
+      {showMenu && (
+        <FlyOut>
+          <AutoColumn $gap="16px">
+            <Text color={'white'} fontWeight={600} fontSize="16px">
+              Select network
+            </Text>
+            {NETWORKS_LIST.map((n) => {
+              return (
+                <StyledInternalLink key={n.id} to={`${n === ZeroNetworkNetworkInfo ? '' : '/' + n.route}/home`}>
+                  <NetworkRow
+                    onClick={() => {
+                      setShowMenu(false)
+                    }}
+                    active={activeNetwork.id === n.id}
+                  >
+                    <RowFixed>
+                      <LogaContainer>
+                        <LogoWrapper src={n.imageURL} />
+                        {activeNetwork.id === n.id && <GreenDot />}
+                      </LogaContainer>
+                      <Text ml="12px" color={'white'}>
+                        {n.name}
+                      </Text>
+                    </RowFixed>
+                  </NetworkRow>
+                </StyledInternalLink>
+              )
+            })}
+          </AutoColumn>
+        </FlyOut>
+      )}
+    </Container>
+  )
 }
