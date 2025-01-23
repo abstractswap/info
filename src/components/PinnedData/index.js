@@ -1,5 +1,5 @@
 import React from 'react'
-import { withRouter } from 'react-router-dom'
+import { withRouter, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 import { RowBetween, RowFixed } from '../Row'
 import { AutoColumn } from '../Column'
@@ -51,6 +51,9 @@ function PinnedData({ history, open, setSavedOpen }) {
   const [savedPairs, , removePair] = useSavedPairs()
   const [savedTokens, , removeToken] = useSavedTokens()
 
+  const { networkID } = useParams()
+  const url = networkID ? `/${networkID}` : ''
+
   return !open ? (
     <RightColumn open={open} onClick={() => setSavedOpen(true)}>
       <SavedButton open={open}>
@@ -87,11 +90,11 @@ function PinnedData({ history, open, setSavedOpen }) {
                 const pair = savedPairs[address]
                 return (
                   <RowBetween key={pair.address}>
-                    <ButtonFaded onClick={() => history.push('/pair/' + address)}>
+                    <ButtonFaded onClick={() => history.push(url + '/pair/' + address)}>
                       <RowFixed>
                         <TYPE.header>
                           <FormattedName
-                            text={pair.token0Symbol + '/' + pair.token1Symbol}
+                            text={url + '-' + pair.token0Symbol + '/' + pair.token1Symbol}
                             maxCharacters={12}
                             fontSize={'12px'}
                           />
@@ -123,7 +126,7 @@ function PinnedData({ history, open, setSavedOpen }) {
                 const token = savedTokens[address]
                 return (
                   <RowBetween key={address}>
-                    <ButtonFaded onClick={() => history.push('/token/' + address)}>
+                    <ButtonFaded onClick={() => history.push(url + '/token/' + address)}>
                       <RowFixed>
                         <TokenLogo address={address} size={'14px'} />
                         <TYPE.header ml={'6px'}>

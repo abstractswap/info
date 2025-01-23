@@ -13,7 +13,8 @@ import AccountPage from './pages/AccountPage'
 import AllTokensPage from './pages/AllTokensPage'
 import AllPairsPage from './pages/AllPairsPage'
 import PinnedData from './components/PinnedData'
-
+import { NETWORKS_LIST, ZeroNetworkNetworkInfo } from './constants/networks'
+import { useParams } from 'react-router-dom'
 import SideNav from './components/SideNav'
 import AccountLookup from './pages/AccountLookup'
 import Meta from './components/Meta'
@@ -21,6 +22,9 @@ import LocalLoader from './components/LocalLoader'
 import { useLatestBlocks } from './contexts/Application'
 import GoogleAnalyticsReporter from './components/analytics/GoogleAnalyticsReporter'
 import { PAIR_BLACKLIST, TOKEN_BLACKLIST } from './constants'
+import { useEffect } from 'react';
+import { useHistory } from 'react-router-dom';
+import { useNetworksData } from './contexts/NetworkData'
 
 const AppWrapper = styled.div`
   position: relative;
@@ -95,6 +99,19 @@ const Decorator = styled.span`
  * Wrap the component with the header and sidebar pinned tab
  */
 const LayoutWrapper = ({ children, savedOpen, setSavedOpen }) => {
+  const [, updateChain] = useNetworksData()
+  const { networkID } = useParams()
+  useEffect(() => {
+    if (!networkID) {
+      updateChain(ZeroNetworkNetworkInfo)
+    } else {
+      NETWORKS_LIST.map((n) => {
+        if (networkID === n.route.toLocaleLowerCase()) {
+          updateChain(n)
+        }
+      })
+    }
+  }, [networkID, updateChain])
   return (
     <>
       <ContentWrapper open={savedOpen}>
@@ -118,6 +135,23 @@ function App() {
   const globalChartData = useGlobalChartData()
   const [latestBlock, headBlock] = useLatestBlocks()
 
+
+
+  // const location = useLocation()
+  // const [activeNetwork, setActiveNetwork] = useActiveNetworkVersion()
+
+  // useEffect(() => {
+  //   if (location.pathname === '/') {
+  //     setActiveNetwork(ZeroNetworkNetworkInfo)
+  //   } else {
+  //     SUPPORTED_NETWORK_VERSIONS.map((n) => {
+  //       if (location.pathname.includes(n.route.toLocaleLowerCase())) {
+  //         setActiveNetwork(n)
+  //       }
+  //     })
+  //   }
+  // }, [location.pathname, setActiveNetwork])
+
   // show warning
   const showWarning = headBlock && latestBlock ? headBlock - latestBlock > BLOCK_DIFFERENCE_THRESHOLD : false
 
@@ -140,16 +174,16 @@ function App() {
           </BannerWrapper>
         )}
         {globalData &&
-        Object.keys(globalData).length > 0 &&
-        globalChartData &&
-        Object.keys(globalChartData).length > 0 ? (
+          Object.keys(globalData).length > 0 &&
+          globalChartData &&
+          Object.keys(globalChartData).length > 0 ? (
           <BrowserRouter>
             <Route component={GoogleAnalyticsReporter} />
             <Switch>
               <Route
                 exacts
                 strict
-                path="/token/:tokenAddress"
+                path="/:networkID?/token/:tokenAddress"
                 render={({ match }) => {
                   if (
                     isAddress(match.params.tokenAddress.toLowerCase()) &&
@@ -168,7 +202,7 @@ function App() {
               <Route
                 exacts
                 strict
-                path="/pair/:pairAddress"
+                path="/:networkID?/pair/:pairAddress"
                 render={({ match }) => {
                   if (
                     isAddress(match.params.pairAddress.toLowerCase()) &&
@@ -187,7 +221,7 @@ function App() {
               <Route
                 exacts
                 strict
-                path="/account/:accountAddress"
+                path="/:networkID?/account/:accountAddress"
                 render={({ match }) => {
                   if (isAddress(match.params.accountAddress.toLowerCase())) {
                     return (
@@ -201,31 +235,31 @@ function App() {
                 }}
               />
 
-              <Route path="/home">
+              <Route path="/:networkID?/home">
                 <LayoutWrapper savedOpen={savedOpen} setSavedOpen={setSavedOpen}>
                   <GlobalPage />
                 </LayoutWrapper>
               </Route>
 
-              <Route path="/tokens">
+              <Route path="/:networkID?/tokens">
                 <LayoutWrapper savedOpen={savedOpen} setSavedOpen={setSavedOpen}>
                   <AllTokensPage />
                 </LayoutWrapper>
               </Route>
 
-              <Route path="/pairs">
+              <Route path="/:networkID?/pairs">
                 <LayoutWrapper savedOpen={savedOpen} setSavedOpen={setSavedOpen}>
                   <AllPairsPage />
                 </LayoutWrapper>
               </Route>
 
-              <Route path="/accounts">
+              <Route path="/:networkID?/accounts">
                 <LayoutWrapper savedOpen={savedOpen} setSavedOpen={setSavedOpen}>
                   <AccountLookup />
                 </LayoutWrapper>
               </Route>
 
-              <Redirect to="/home" />
+              <Redirect to="/:networkID?/home" />
             </Switch>
           </BrowserRouter>
         ) : (

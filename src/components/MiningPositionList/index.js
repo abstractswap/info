@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import Link, { CustomLink } from '../Link'
 import { Divider } from '..'
 import DoubleTokenLogo from '../DoubleLogo'
-import { withRouter } from 'react-router-dom'
+import { withRouter, useParams } from 'react-router-dom'
 import { formattedNum, getUniswapAppLink } from '../../utils'
 import { AutoColumn } from '../Column'
 import { RowFixed } from '../Row'
@@ -119,6 +119,9 @@ function MiningPositionList({ miningPositions }) {
   const [sortDirection, setSortDirection] = useState(true)
   const [sortedColumn, setSortedColumn] = useState(SORT_FIELD.VALUE)
 
+  const { networkID } = useParams()
+  const url = networkID ? `/${networkID}` : ''
+
   useEffect(() => {
     setMaxPage(1) // edit this to do modular
     setPage(1)
@@ -154,8 +157,8 @@ function MiningPositionList({ miningPositions }) {
             <DoubleTokenLogo size={16} a0={firstPairAddress} a1={secondPairAddress} margin={!below740} />
           </AutoColumn>
           <AutoColumn gap="8px" justify="flex-start" style={{ marginLeft: '20px' }}>
-            <CustomLink to={'/pair/' + pairAddress}>
-              <TYPE.main style={{ whiteSpace: 'nowrap' }} to={'/pair/'}>
+            <CustomLink to={url + '/pair/' + pairAddress}>
+              <TYPE.main style={{ whiteSpace: 'nowrap' }} to={url + '/pair/'}>
                 <FormattedName text={firstPairName + '-' + secondPairName} maxCharacters={below740 ? 10 : 18} />
               </TYPE.main>
             </CustomLink>

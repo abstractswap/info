@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import 'feather-icons'
-import { withRouter } from 'react-router-dom'
+import { withRouter, useParams } from 'react-router-dom'
 import { Text } from 'rebass'
 import styled from 'styled-components'
 import Link from '../components/Link'
@@ -177,6 +177,9 @@ function TokenPage({ address, history }) {
 
   const [useTracked, setUseTracked] = useState(true)
 
+  const { networkID } = useParams()
+  const url = networkID ? `/${networkID}` : ''
+
   if (TOKEN_BLACKLIST.includes(address)) {
     return (
       <BlockedWrapper>
@@ -207,7 +210,7 @@ function TokenPage({ address, history }) {
         <RowBetween style={{ flexWrap: 'wrap', alingItems: 'start' }}>
           <AutoRow align="flex-end" style={{ width: 'fit-content' }}>
             <TYPE.body>
-              <BasicLink to="/tokens">{'Tokens '}</BasicLink>→ {symbol}
+              <BasicLink to={url + "/tokens"}>{'Tokens '}</BasicLink>→ {symbol}
             </TYPE.body>
             <Link
               style={{ width: 'fit-content' }}

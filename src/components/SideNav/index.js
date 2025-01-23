@@ -6,9 +6,8 @@ import { BasicLink } from '../Link'
 import { useMedia } from 'react-use'
 import { transparentize } from 'polished'
 import { TYPE } from '../../Theme'
-import { withRouter } from 'react-router-dom'
+import { withRouter, useParams } from 'react-router-dom'
 import { TrendingUp, List, PieChart, Disc } from 'react-feather'
-import Link from '../Link'
 import { useSessionStart } from '../../contexts/Application'
 import { useDarkModeManager } from '../../contexts/LocalStorage'
 import Toggle from '../Toggle'
@@ -60,20 +59,20 @@ const MobileWrapper = styled.div`
   align-items: center;
 `
 
-const HeaderText = styled.div`
-  margin-right: 0.75rem;
-  font-size: 0.825rem;
-  font-weight: 500;
-  display: inline-box;
-  display: -webkit-inline-box;
-  opacity: 0.8;
-  :hover {
-    opacity: 1;
-  }
-  a {
-    color: ${({ theme }) => theme.white};
-  }
-`
+// const HeaderText = styled.div`
+//   margin-right: 0.75rem;
+//   font-size: 0.825rem;
+//   font-weight: 500;
+//   display: inline-box;
+//   display: -webkit-inline-box;
+//   opacity: 0.8;
+//   :hover {
+//     opacity: 1;
+//   }
+//   a {
+//     color: ${({ theme }) => theme.white};
+//   }
+// `
 
 const Polling = styled.div`
   position: fixed;
@@ -108,6 +107,8 @@ function SideNav({ history }) {
 
   const [isDark, toggleDarkMode] = useDarkModeManager()
 
+  const { networkID } = useParams()
+  const url = networkID ? `/${networkID}` : ''
   return (
     <Wrapper isMobile={below1080}>
       {!below1080 ? (
@@ -116,13 +117,13 @@ function SideNav({ history }) {
             <Title />
             {!below1080 && (
               <AutoColumn gap="1.25rem" style={{ marginTop: '1rem' }}>
-                <BasicLink to="/home">
-                  <Option activeText={history.location.pathname === '/home' ?? undefined}>
+                <BasicLink to={url + "/home"}>
+                  <Option activeText={history.location.pathname === url + '/home' ?? undefined}>
                     <TrendingUp size={20} style={{ marginRight: '.75rem' }} />
                     Overview
                   </Option>
                 </BasicLink>
-                <BasicLink to="/tokens">
+                <BasicLink to={url + '/tokens'}>
                   <Option
                     activeText={
                       (history.location.pathname.split('/')[1] === 'tokens' ||
@@ -134,7 +135,7 @@ function SideNav({ history }) {
                     Tokens
                   </Option>
                 </BasicLink>
-                <BasicLink to="/pairs">
+                <BasicLink to={url + "/pairs"}>
                   <Option
                     activeText={
                       (history.location.pathname.split('/')[1] === 'pairs' ||

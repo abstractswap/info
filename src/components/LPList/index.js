@@ -8,7 +8,7 @@ import styled from 'styled-components'
 
 import { CustomLink } from '../Link'
 import { Divider } from '..'
-import { withRouter } from 'react-router-dom'
+import { withRouter, useParams } from 'react-router-dom'
 import { formattedNum } from '../../utils'
 import { TYPE } from '../../Theme'
 import DoubleTokenLogo from '../DoubleLogo'
@@ -84,6 +84,9 @@ function LPList({ lps, disbaleLinks, maxItems = 10 }) {
   const [maxPage, setMaxPage] = useState(1)
   const ITEMS_PER_PAGE = maxItems
 
+  const { networkID } = useParams()
+  const url = networkID ? `/${networkID}` : ''
+
   useEffect(() => {
     setMaxPage(1) // edit this to do modular
     setPage(1)
@@ -120,7 +123,7 @@ function LPList({ lps, disbaleLinks, maxItems = 10 }) {
         )} */}
 
         <DataText>
-          <CustomLink area="pair" to={'/pair/' + lp.pairAddress}>
+          <CustomLink area="pair" to={url + '/pair/' + lp.pairAddress}>
             <RowFixed>
               {!below600 && <DoubleTokenLogo a0={lp.token0} a1={lp.token1} size={16} margin={true} />}
               {lp.pairName}

@@ -8,7 +8,7 @@ import styled from 'styled-components'
 import Link, { CustomLink } from '../Link'
 import { Divider } from '../../components'
 import DoubleTokenLogo from '../DoubleLogo'
-import { withRouter } from 'react-router-dom'
+import { withRouter, useParams } from 'react-router-dom'
 import { formattedNum, getPoolLink } from '../../utils'
 import { AutoColumn } from '../Column'
 import { useEthPrice } from '../../contexts/GlobalData'
@@ -140,7 +140,8 @@ function PositionList({ positions }) {
   const ListItem = ({ position, index }) => {
     const poolOwnership = position.liquidityTokenBalance / position.pair.totalSupply
     const valueUSD = poolOwnership * position.pair.reserveUSD
-
+    const { networkID } = useParams()
+    const url = networkID ? `/${networkID}` : ''
     return (
       <DashGrid style={{ opacity: poolOwnership > 0 ? 1 : 0.6 }} focus={true}>
         {!below740 && <DataText area="number">{index}</DataText>}
@@ -149,8 +150,8 @@ function PositionList({ positions }) {
             <DoubleTokenLogo size={16} a0={position.pair.token0.id} a1={position.pair.token1.id} margin={!below740} />
           </AutoColumn>
           <AutoColumn gap="8px" justify="flex-start" style={{ marginLeft: '20px' }}>
-            <CustomLink to={'/pair/' + position.pair.id}>
-              <TYPE.main style={{ whiteSpace: 'nowrap' }} to={'/pair/'}>
+            <CustomLink to={url + '/pair/' + position.pair.id}>
+              <TYPE.main style={{ whiteSpace: 'nowrap' }} to={url + '/pair/'}>
                 <FormattedName
                   text={position.pair.token0.symbol + '-' + position.pair.token1.symbol}
                   maxCharacters={below740 ? 10 : 18}
@@ -214,10 +215,10 @@ function PositionList({ positions }) {
                   <TYPE.small fontWeight={400}>
                     {parseFloat(position.pair.token0.derivedETH)
                       ? formattedNum(
-                          position?.fees.sum / (parseFloat(position.pair.token0.derivedETH) * ethPrice) / 2,
-                          false,
-                          true
-                        )
+                        position?.fees.sum / (parseFloat(position.pair.token0.derivedETH) * ethPrice) / 2,
+                        false,
+                        true
+                      )
                       : 0}{' '}
                   </TYPE.small>
                   <FormattedName
@@ -231,10 +232,10 @@ function PositionList({ positions }) {
                   <TYPE.small fontWeight={400}>
                     {parseFloat(position.pair.token1.derivedETH)
                       ? formattedNum(
-                          position?.fees.sum / (parseFloat(position.pair.token1.derivedETH) * ethPrice) / 2,
-                          false,
-                          true
-                        )
+                        position?.fees.sum / (parseFloat(position.pair.token1.derivedETH) * ethPrice) / 2,
+                        false,
+                        true
+                      )
                       : 0}{' '}
                   </TYPE.small>
                   <FormattedName

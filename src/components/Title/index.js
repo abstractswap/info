@@ -1,5 +1,5 @@
 import React from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import styled from 'styled-components'
 
 import { Flex } from 'rebass'
@@ -42,6 +42,8 @@ const Option = styled.div`
 export default function Title() {
   const history = useHistory()
   const below1080 = useMedia('(max-width: 1080px)')
+  const { networkID } = useParams()
+  const url = networkID ? `/${networkID}` : ''
 
   return (
     <TitleWrapper onClick={() => history.push('/')}>
@@ -59,7 +61,7 @@ export default function Title() {
             <BasicLink to="/home">
               <Option activeText={history.location.pathname === '/home' ?? undefined}>Overview</Option>
             </BasicLink>
-            <BasicLink to="/tokens">
+            <BasicLink to={url + "/tokens"}>
               <Option
                 activeText={
                   (history.location.pathname.split('/')[1] === 'tokens' ||
@@ -70,7 +72,7 @@ export default function Title() {
                 Tokens
               </Option>
             </BasicLink>
-            <BasicLink to="/pairs">
+            <BasicLink to={url + "/pairs"}>
               <Option
                 activeText={
                   (history.location.pathname.split('/')[1] === 'pairs' ||

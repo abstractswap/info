@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import { withRouter } from 'react-router-dom'
+import { withRouter, useParams } from 'react-router-dom'
 import { Box } from 'rebass'
 import styled from 'styled-components'
 
@@ -66,7 +66,8 @@ function GlobalPage() {
 
   // for tracked data on pairs
   const [useTracked, setUseTracked] = useState(true)
-
+  const { networkID } = useParams()
+  const url = networkID ? `/${networkID}` : ''
   return (
     <PageWrapper>
       <ThemedBackground backgroundColor={transparentize(0.6, '#ff007a')} />
@@ -135,7 +136,7 @@ function GlobalPage() {
               <TYPE.main fontSize={'1.125rem'} style={{ whiteSpace: 'nowrap' }}>
                 Top Tokens
               </TYPE.main>
-              <CustomLink to={'/tokens'}>See All</CustomLink>
+              <CustomLink to={url + '/tokens'}>See All</CustomLink>
             </RowBetween>
           </ListOptions>
           <Panel style={{ marginTop: '6px', padding: '1.125rem 0 ' }}>
@@ -153,7 +154,7 @@ function GlobalPage() {
                   text={'Hide untracked pairs'}
                 />
                 <QuestionHelper text="USD amounts may be inaccurate in low liquiidty pairs or pairs without ETH or stablecoins." />
-                <CustomLink to={'/pairs'}>See All</CustomLink>
+                <CustomLink to={url + '/pairs'}>See All</CustomLink>
               </AutoRow>
             </RowBetween>
           </ListOptions>

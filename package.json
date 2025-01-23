@@ -71,8 +71,8 @@
     "wcag-contrast": "^3.0.0"
   },
   "scripts": {
-    "start": "NODE_OPTIONS='--openssl-legacy-provider' react-scripts start",
-    "build": "NODE_OPTIONS='--openssl-legacy-provider' react-scripts build",
+    "start": "react-scripts start",
+    "build": "react-scripts build",
     "test": "react-scripts test",
     "eject": "react-scripts eject"
   },
@@ -90,6 +90,9 @@
   },
   "license": "GPL-3.0-or-later",
   "dependencies": {
-    "react-helmet": "^6.1.0"
+    "@reduxjs/toolkit": "^2.5.0",
+    "react-helmet": "^6.1.0",
+    "react-redux": "^9.2.0",
+    "redux-localstorage-simple": "^2.5.1"
   }
 }
