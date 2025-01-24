@@ -39,15 +39,9 @@ export default function GlobalStats() {
           {!below400 && (
             <TYPE.main
               mr={'1rem'}
-              onMouseEnter={() => {
-                setShowPriceCard(true)
-              }}
-              onMouseLeave={() => {
-                setShowPriceCard(false)
-              }}
               style={{ position: 'relative' }}
             >
-              Network: <Medium>Abstract</Medium>
+              Network: <Medium>Abstract Testnet</Medium>
             </TYPE.main>
           )}
           {!below400 && (
