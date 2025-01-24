@@ -36,6 +36,15 @@ export default function GlobalStats() {
     <Header>
       <RowBetween style={{ padding: below816 ? '0.5rem' : '.5rem' }}>
         <RowFixed>
+
+          {!below400 && (
+            <TYPE.main
+              mr={'1rem'}
+              style={{ position: 'relative' }}
+            >
+              Network: <Medium>Zero</Medium>
+            </TYPE.main>
+          )}
           {!below400 && (
             <TYPE.main
               mr={'1rem'}

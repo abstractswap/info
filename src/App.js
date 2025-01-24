@@ -79,7 +79,7 @@ const WarningBanner = styled.div`
 `
 
 const UrlBanner = styled.div`
-  background-color: #ff007a;
+  background-color: #6E56CF;
   padding: 1rem;
   color: white;
   width: 100%;
@@ -140,9 +140,9 @@ function App() {
           </BannerWrapper>
         )}
         {globalData &&
-        Object.keys(globalData).length > 0 &&
-        globalChartData &&
-        Object.keys(globalChartData).length > 0 ? (
+          Object.keys(globalData).length > 0 &&
+          globalChartData &&
+          Object.keys(globalChartData).length > 0 ? (
           <BrowserRouter>
             <Route component={GoogleAnalyticsReporter} />
             <Switch>
