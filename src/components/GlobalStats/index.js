@@ -47,8 +47,7 @@ export default function GlobalStats() {
               }}
               style={{ position: 'relative' }}
             >
-              Network: <Medium>Abstract</Medium>
-              {showPriceCard && <UniPrice />}
+              Network: <Medium>Ink</Medium>
             </TYPE.main>
           )}
           {!below400 && (
