@@ -23,6 +23,7 @@ import weekOfYear from 'dayjs/plugin/weekOfYear'
 import { useAllPairData } from './PairData'
 import { useTokenChartDataCombined } from './TokenData'
 import { useNetworksData } from './NetworkData'
+import { FACTORY_ADDRESSES } from '../constants'
 const UPDATE = 'UPDATE'
 const UPDATE_TXNS = 'UPDATE_TXNS'
 const UPDATE_CHART = 'UPDATE_CHART'
@@ -245,32 +246,32 @@ async function getGlobalData(ethPrice, oldEthPrice, activeNetwork) {
 
     // fetch the global data
     let result = await client(activeNetwork.client).query({
-      query: GLOBAL_DATA(),
+      query: GLOBAL_DATA(undefined, FACTORY_ADDRESSES[activeNetwork.id]),
       fetchPolicy: 'cache-first',
     })
     data = result.data.uniswapFactories[0]
 
     // fetch the historical data
     let oneDayResult = await client(activeNetwork.client).query({
-      query: GLOBAL_DATA(oneDayBlock?.number),
+      query: GLOBAL_DATA(oneDayBlock?.number, FACTORY_ADDRESSES[activeNetwork.id]),
       fetchPolicy: 'cache-first',
     })
     oneDayData = oneDayResult.data.uniswapFactories[0]
 
     let twoDayResult = await client(activeNetwork.client).query({
-      query: GLOBAL_DATA(twoDayBlock?.number),
+      query: GLOBAL_DATA(twoDayBlock?.number, FACTORY_ADDRESSES[activeNetwork.id]),
       fetchPolicy: 'cache-first',
     })
     twoDayData = twoDayResult.data.uniswapFactories[0]
 
     let oneWeekResult = await client(activeNetwork.client).query({
-      query: GLOBAL_DATA(oneWeekBlock?.number),
+      query: GLOBAL_DATA(oneWeekBlock?.number, FACTORY_ADDRESSES[activeNetwork.id]),
       fetchPolicy: 'cache-first',
     })
     const oneWeekData = oneWeekResult.data.uniswapFactories[0]
 
     let twoWeekResult = await client(activeNetwork.client).query({
-      query: GLOBAL_DATA(twoWeekBlock?.number),
+      query: GLOBAL_DATA(twoWeekBlock?.number, FACTORY_ADDRESSES[activeNetwork.id]),
       fetchPolicy: 'cache-first',
     })
     const twoWeekData = twoWeekResult.data.uniswapFactories[0]

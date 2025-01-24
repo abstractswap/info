@@ -2,7 +2,7 @@ import React, { useState, useRef } from 'react'
 import { ChevronDown } from 'react-feather'
 import styled from 'styled-components'
 import { useNetworksData } from '../../contexts/NetworkData'
-import { NETWORKS_LIST, ZeroNetworkNetworkInfo } from '../../constants/networks'
+import { AbstractNetworkInfo, NETWORKS_LIST, ZeroNetworkNetworkInfo } from '../../constants/networks'
 import { Link } from 'react-router-dom'
 import { Box } from 'rebass/styled-components'
 import { useOnClickOutside } from '../../hooks/useOnClickOutside'
@@ -157,7 +157,7 @@ export default function NetworkDropdown() {
             </Text>
             {NETWORKS_LIST.map((n) => {
               return (
-                <StyledInternalLink key={n.id} to={`${n === ZeroNetworkNetworkInfo ? '' : '/' + n.route}/home`}>
+                <StyledInternalLink key={n.id} to={`${n === AbstractNetworkInfo ? '' : '/' + n.route}/home`}>
                   <NetworkRow
                     onClick={() => {
                       setShowMenu(false)

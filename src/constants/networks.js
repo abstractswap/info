@@ -42,7 +42,7 @@ export const AbstractTestnetNetworkInfo = {
 export const ZeroNetworkNetworkInfo = {
     chainId: 543210,
     id: 543210,
-    route: '',
+    route: 'zero',
     name: 'Zero Mainnet',
     bgColor: '#0052ff',
     primaryColor: '#0052ff',
@@ -137,19 +137,19 @@ export const InkNetworkInfo = {
     startTimestamp: 1620201600,
 }
 
-// export const AbstractNetworkInfo = {
-//     chainId: ChainId.ABSTRACT_MAINNET,
-//     id: SupportedNetwork.ABSTRACT,
-//     route: 'abstract',
-//     name: 'Abstract',
-//     bgColor: '#00DE73',
-//     primaryColor: '#07C983',
-//     secondaryColor: '#2172E5',
-//     imageURL: ABSTRACT_LOGO_URL,
-//     client: getSubgraphLink('abstract'),
-//     blockClient: getSubgraphLink('abstract', false),
-//     startTimestamp: 1620201600,
-// }
+export const AbstractNetworkInfo = {
+    chainId: 2741,
+    id: 2741,
+    route: '',
+    name: 'Abstract',
+    bgColor: '#00DE73',
+    primaryColor: '#07C983',
+    secondaryColor: '#2172E5',
+    imageURL: ABSTRACT_LOGO_URL,
+    client: getSubgraphLink('abstract'),
+    blockClient: getSubgraphLink('abstract', false),
+    startTimestamp: 1620201600,
+}
 
 
 
@@ -162,7 +162,7 @@ export const SUPPORTED_NETWORK_VERSIONS = [
     // RedstoneNetworkInfo,
     // RedstoneGarnetNetworkInfo,
     InkNetworkInfo,
-    // AbstractNetworkInfo,
+    AbstractNetworkInfo,
 ]
 
 export const NETWORKS_LIST = Object.values(SUPPORTED_NETWORK_VERSIONS)

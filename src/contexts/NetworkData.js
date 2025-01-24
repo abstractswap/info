@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useReducer, useMemo, useCallback } from 'react'
-import { NETWORKS_LIST, ZeroNetworkNetworkInfo } from '../constants/networks'
+import { AbstractNetworkInfo, NETWORKS_LIST, ZeroNetworkNetworkInfo } from '../constants/networks'
 
 const UPDATE_CHAIN = 'UPDATE_CHAIN'
 
 const INITIAL_STATE = {
-  activeNetwork: ZeroNetworkNetworkInfo,
+  activeNetwork: AbstractNetworkInfo,
 }
 
 const NetworkDataContext = createContext()
@@ -32,6 +32,8 @@ function reducer(state, { type, payload }) {
 
 export default function Provider({ children }) {
   const [state, dispatch] = useReducer(reducer, INITIAL_STATE)
+
+  console.log({ state })
   const updateActiveNetwork = useCallback(newChain => {
     dispatch({
       type: UPDATE_CHAIN,
@@ -60,5 +62,5 @@ export default function Provider({ children }) {
 
 export function useNetworksData() {
   const [{ activeNetwork }, { updateActiveNetwork }] = useNetworksDataContext()
-  return [activeNetwork ?? ZeroNetworkNetworkInfo, updateActiveNetwork]
+  return [activeNetwork ?? AbstractNetworkInfo, updateActiveNetwork]
 }

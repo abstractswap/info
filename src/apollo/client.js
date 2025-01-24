@@ -14,7 +14,7 @@ import { getSubgraphLink } from '../constants/networks'
 export function client(url) {
   return new ApolloClient({
     link: new HttpLink({
-      uri: url ?? getSubgraphLink('zero'),
+      uri: url ?? getSubgraphLink('abstract'),
     }),
     cache: new InMemoryCache(),
     shouldBatch: true,
@@ -49,7 +49,7 @@ export const stakingClient = new ApolloClient({
 
 export const blockClient = new ApolloClient({
   link: new HttpLink({
-    uri: 'https://graph-node.internal.reservoir.tools/subgraphs/name/zero/blocks-subgraph',
+    uri: 'https://graph-node.internal.reservoir.tools/subgraphs/name/abstract/blocks-subgraph',
   }),
   cache: new InMemoryCache(),
 })

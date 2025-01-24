@@ -13,7 +13,7 @@ import AccountPage from './pages/AccountPage'
 import AllTokensPage from './pages/AllTokensPage'
 import AllPairsPage from './pages/AllPairsPage'
 import PinnedData from './components/PinnedData'
-import { NETWORKS_LIST, ZeroNetworkNetworkInfo } from './constants/networks'
+import { NETWORKS_LIST, AbstractNetworkInfo } from './constants/networks'
 import { useParams } from 'react-router-dom'
 import SideNav from './components/SideNav'
 import AccountLookup from './pages/AccountLookup'
@@ -103,7 +103,7 @@ const LayoutWrapper = ({ children, savedOpen, setSavedOpen }) => {
   const { networkID } = useParams()
   useEffect(() => {
     if (!networkID) {
-      updateActiveNetwork(ZeroNetworkNetworkInfo)
+      updateActiveNetwork(AbstractNetworkInfo)
     } else {
       NETWORKS_LIST.map((n) => {
         if (networkID === n.route.toLocaleLowerCase()) {
