@@ -1,7 +1,7 @@
-export const BLOCK_EXPLORER_URL = 'https://sepolia.abscan.org/' //TEMP
-export const BLOCK_EXPLORER_NAME = 'Abstract Block Explorer'
+export const BLOCK_EXPLORER_URL = 'https://explorer.inkonchain.com/'
+export const BLOCK_EXPLORER_NAME = 'Ink Blockchain Explorer'
 
-export const FACTORY_ADDRESS = '0xcD87b21B627cB2d695FBc2101cf64F8007F25E07'
+export const FACTORY_ADDRESS = '0xfe57A6BA1951F69aE2Ed4abe23e0f095DF500C04'
 
 export const BUNDLE_ID = '1'
 
