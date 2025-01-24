@@ -1,7 +1,7 @@
-export const BLOCK_EXPLORER_URL = 'https://sepolia.abscan.org/' //TEMP
-export const BLOCK_EXPLORER_NAME = 'Abstract Block Explorer'
+export const BLOCK_EXPLORER_URL = 'https://shapescan.xyz/' //TEMP
+export const BLOCK_EXPLORER_NAME = 'ShapeScan'
 
-export const FACTORY_ADDRESS = '0xcD87b21B627cB2d695FBc2101cf64F8007F25E07'
+export const FACTORY_ADDRESS = '0xb411eaf2f2070822b26e372e3ea63c5060ba45e6'
 
 export const BUNDLE_ID = '1'
 
