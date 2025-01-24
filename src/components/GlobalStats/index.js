@@ -47,6 +47,21 @@ export default function GlobalStats() {
               }}
               style={{ position: 'relative' }}
             >
+              Network: <Medium>Abstract</Medium>
+              {showPriceCard && <UniPrice />}
+            </TYPE.main>
+          )}
+          {!below400 && (
+            <TYPE.main
+              mr={'1rem'}
+              onMouseEnter={() => {
+                setShowPriceCard(true)
+              }}
+              onMouseLeave={() => {
+                setShowPriceCard(false)
+              }}
+              style={{ position: 'relative' }}
+            >
               ETH Price: <Medium>{formattedEthPrice}</Medium>
               {showPriceCard && <UniPrice />}
             </TYPE.main>
