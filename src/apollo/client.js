@@ -4,7 +4,7 @@ import { HttpLink } from 'apollo-link-http'
 
 export const client = new ApolloClient({
   link: new HttpLink({
-    uri: 'https://graph-node.internal.reservoir.tools/subgraphs/name/zero/v2-subgraph',
+    uri: 'https://graph-node.internal.reservoir.tools/subgraphs/name/anime-testnet/v2-subgraph',
   }),
   cache: new InMemoryCache(),
   shouldBatch: true,
@@ -36,7 +36,7 @@ export const stakingClient = new ApolloClient({
 
 export const blockClient = new ApolloClient({
   link: new HttpLink({
-    uri: 'https://graph-node.internal.reservoir.tools/subgraphs/name/zero/blocks-subgraph',
+    uri: 'https://graph-node.internal.reservoir.tools/subgraphs/name/anime-testnet/blocks-subgraph',
   }),
   cache: new InMemoryCache(),
 })

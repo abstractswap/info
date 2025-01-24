@@ -1,7 +1,7 @@
-export const BLOCK_EXPLORER_URL = 'https://explorer.zero.network'
-export const BLOCK_EXPLORER_NAME = 'ZERϴ Block Explorer'
+export const BLOCK_EXPLORER_URL = 'https://temporary.domain'
+export const BLOCK_EXPLORER_NAME = 'Anime Testnet Block Explorer'
 
-export const FACTORY_ADDRESS = '0x1B4427e212475B12e62f0f142b8AfEf3BC18B559'
+export const FACTORY_ADDRESS = '0x69f2888491eA07BB10936aA110A5E0481122efd3'
 
 export const BUNDLE_ID = '1'
 

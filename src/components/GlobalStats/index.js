@@ -42,7 +42,7 @@ export default function GlobalStats() {
               mr={'1rem'}
               style={{ position: 'relative' }}
             >
-              Network: <Medium>Zero</Medium>
+              Network: <Medium>Anime Testnet</Medium>
             </TYPE.main>
           )}
           {!below400 && (
