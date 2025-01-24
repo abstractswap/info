@@ -16,12 +16,18 @@ export const START_BLOCKS = {
     //ChainID : block
     11124: 356725,
     543210: 727,
-    60808: 5188280,
-    7560: 9567951,
-    360: 6022152,
-    690: 924516,
-    17069: 586081,
+    7560: 9610055,
+    360: 6177330,
     57073: 284117,
+}
+
+export const FACTORIES = {
+    //ChainID : block
+    11124: "0xcD87b21B627cB2d695FBc2101cf64F8007F25E07",
+    543210: "0x1B4427e212475B12e62f0f142b8AfEf3BC18B559",
+    7560: "0x8AdDa31FE63696Ac64DED7D0Ea208102b1358c44",
+    57073: "0xfe57a6ba1951f69ae2ed4abe23e0f095df500c04",
+    360: "0xb411eaf2f2070822b26e372e3ea63c5060ba45e6"
 }
 
 export const AbstractTestnetNetworkInfo = {
@@ -35,7 +41,7 @@ export const AbstractTestnetNetworkInfo = {
     client: getSubgraphLink('absctract-testnet'),
     blockClient: getSubgraphLink('absctract-testnet', false),
     imageURL: ABSTRACT_LOGO_URL,
-    startTimestamp: 1620201600,
+    startTimestamp: 0,
 
 }
 
@@ -50,7 +56,7 @@ export const ZeroNetworkNetworkInfo = {
     client: getSubgraphLink('zero'),
     blockClient: getSubgraphLink('zero', false),
     imageURL: ZERO_LOGO_URL,
-    startTimestamp: 1620201600,
+    startTimestamp: 0,
 }
 
 export const BobNetworkNetworkInfo = {
@@ -64,7 +70,7 @@ export const BobNetworkNetworkInfo = {
     client: getSubgraphLink('bob'),
     blockClient: getSubgraphLink('bob', false),
     imageURL: BOB_LOGO_URL,
-    startTimestamp: 1620201600,
+    startTimestamp: 0,
 }
 
 export const CyberNetworkNetworkInfo = {
@@ -78,7 +84,7 @@ export const CyberNetworkNetworkInfo = {
     client: getSubgraphLink('cyber'),
     blockClient: getSubgraphLink('cyber', false),
     imageURL: CYBER_LOGO_URL,
-    startTimestamp: 1620201600,
+    startTimestamp: 0,
 }
 
 export const ShapeNetworkNetworkInfo = {
@@ -92,7 +98,7 @@ export const ShapeNetworkNetworkInfo = {
     client: getSubgraphLink('shape'),
     blockClient: getSubgraphLink('shape', false),
     imageURL: SHAPE_LOGO_URL,
-    startTimestamp: 1620201600,
+    startTimestamp: 0,
 }
 
 export const RedstoneNetworkInfo = {
@@ -106,7 +112,7 @@ export const RedstoneNetworkInfo = {
     client: getSubgraphLink('redstone'),
     blockClient: getSubgraphLink('redstone', false),
     imageURL: REDSTONE_LOGO_URL,
-    startTimestamp: 1620201600,
+    startTimestamp: 0,
 }
 
 export const RedstoneGarnetNetworkInfo = {
@@ -120,7 +126,7 @@ export const RedstoneGarnetNetworkInfo = {
     client: getSubgraphLink('redstone-garnet'),
     blockClient: getSubgraphLink('redstone-garnet', false),
     imageURL: REDSTONE_GARNET_LOGO_URL,
-    startTimestamp: 1620201600,
+    startTimestamp: 0,
 }
 
 export const InkNetworkInfo = {
@@ -134,7 +140,7 @@ export const InkNetworkInfo = {
     client: getSubgraphLink('ink'),
     blockClient: getSubgraphLink('ink', false),
     imageURL: INK_LOGO_URL,
-    startTimestamp: 1620201600,
+    startTimestamp: 0,
 }
 
 // export const AbstractNetworkInfo = {
@@ -148,7 +154,7 @@ export const InkNetworkInfo = {
 //     imageURL: ABSTRACT_LOGO_URL,
 //     client: getSubgraphLink('abstract'),
 //     blockClient: getSubgraphLink('abstract', false),
-//     startTimestamp: 1620201600,
+//     startTimestamp: 0,
 // }
 
 

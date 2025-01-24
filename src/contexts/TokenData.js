@@ -27,6 +27,7 @@ import {
 import { timeframeOptions } from '../constants'
 import { useLatestBlocks } from './Application'
 import { updateNameData } from '../utils/data'
+import { useNetworksData } from './NetworkData'
 
 const UPDATE = 'UPDATE'
 const UPDATE_TOKEN_TXNS = 'UPDATE_TOKEN_TXNS'
@@ -220,12 +221,13 @@ export default function Provider({ children }) {
   )
 }
 
-const getTopTokens = async (ethPrice, ethPriceOld) => {
+const getTopTokens = async (ethPrice, ethPriceOld, activeNetwork) => {
   const utcCurrentTime = dayjs()
   const utcOneDayBack = utcCurrentTime.subtract(1, 'day').unix()
   const utcTwoDaysBack = utcCurrentTime.subtract(2, 'day').unix()
-  let oneDayBlock = await getBlockFromTimestamp(utcOneDayBack)
-  let twoDayBlock = await getBlockFromTimestamp(utcTwoDaysBack)
+
+  let oneDayBlock = await getBlockFromTimestamp(utcOneDayBack, activeNetwork)
+  let twoDayBlock = await getBlockFromTimestamp(utcTwoDaysBack, activeNetwork)
 
   try {
     // need to get the top tokens by liquidity by need token day datas
@@ -520,7 +522,7 @@ const getTokenPairs = async (tokenAddress) => {
   }
 }
 
-const getIntervalTokenData = async (tokenAddress, startTime, interval = 3600, latestBlock) => {
+const getIntervalTokenData = async (tokenAddress, startTime, interval = 3600, latestBlock, activeNetwork) => {
   const utcEndTime = dayjs.utc()
   let time = startTime
 
@@ -540,7 +542,7 @@ const getIntervalTokenData = async (tokenAddress, startTime, interval = 3600, la
   // once you have all the timestamps, get the blocks for each timestamp in a bulk query
   let blocks
   try {
-    blocks = await getBlocksFromTimestamps(timestamps, 100)
+    blocks = await getBlocksFromTimestamps(timestamps, 100, activeNetwork)
 
     // catch failing case
     if (!blocks || blocks.length === 0) {
@@ -552,7 +554,7 @@ const getIntervalTokenData = async (tokenAddress, startTime, interval = 3600, la
         return parseFloat(b.number) <= parseFloat(latestBlock)
       })
     }
-    const localClient = client()
+    const localClient = client(activeNetwork.client)
     let result = await splitQuery(PRICES_BY_BLOCK, localClient, [tokenAddress], blocks, 50)
 
     // format token ETH price results
@@ -668,10 +670,11 @@ const getTokenChartData = async (tokenAddress) => {
 export function Updater() {
   const [, { updateTopTokens }] = useTokenDataContext()
   const [ethPrice, ethPriceOld] = useEthPrice()
+  const [activeNetwork,] = useNetworksData()
   useEffect(() => {
     async function getData() {
       // get top pairs for overview list
-      let topTokens = await getTopTokens(ethPrice, ethPriceOld)
+      let topTokens = await getTopTokens(ethPrice, ethPriceOld, activeNetwork)
       topTokens && updateTopTokens(topTokens)
     }
     ethPrice && ethPriceOld && getData()
@@ -855,6 +858,8 @@ export function useTokenPriceData(tokenAddress, timeWindow, interval = 3600) {
   const chartData = state?.[tokenAddress]?.[timeWindow]?.[interval]
   const [latestBlock] = useLatestBlocks()
 
+  const [activeNetwork,] = useNetworksData()
+
   useEffect(() => {
     const currentTime = dayjs.utc()
     const windowSize = timeWindow === timeframeOptions.MONTH ? 'month' : 'week'
@@ -862,7 +867,7 @@ export function useTokenPriceData(tokenAddress, timeWindow, interval = 3600) {
       timeWindow === timeframeOptions.ALL_TIME ? 1589760000 : currentTime.subtract(1, windowSize).startOf('hour').unix()
 
     async function fetch() {
-      let data = await getIntervalTokenData(tokenAddress, startTime, interval, latestBlock)
+      let data = await getIntervalTokenData(tokenAddress, startTime, interval, latestBlock, activeNetwork)
       updatePriceData(tokenAddress, data, timeWindow, interval)
     }
     if (!chartData) {

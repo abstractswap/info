@@ -146,8 +146,8 @@ export async function splitQuery(query, localClient, vars, list, skipCount = 100
  * @dev Query speed is optimized by limiting to a 600-second period
  * @param {Int} timestamp in seconds
  */
-export async function getBlockFromTimestamp(timestamp) {
-  let result = await blockClient.query({
+export async function getBlockFromTimestamp(timestamp, activeNetwork) {
+  let result = await blockClient(activeNetwork.blockClient).query({
     query: GET_BLOCK,
     variables: {
       timestampFrom: timestamp,
@@ -165,12 +165,12 @@ export async function getBlockFromTimestamp(timestamp) {
  * @dev timestamps are returns as they were provided; not the block time.
  * @param {Array} timestamps
  */
-export async function getBlocksFromTimestamps(timestamps, skipCount = 500) {
+export async function getBlocksFromTimestamps(timestamps, skipCount = 500, activeNetwork) {
   if (timestamps?.length === 0) {
     return []
   }
-
-  let fetchedData = await splitQuery(GET_BLOCKS, blockClient, [], timestamps, skipCount)
+  const blockClientLocal = blockClient(activeNetwork.blockClient)
+  let fetchedData = await splitQuery(GET_BLOCKS, blockClientLocal, [], timestamps, skipCount)
 
   let blocks = []
   if (fetchedData) {

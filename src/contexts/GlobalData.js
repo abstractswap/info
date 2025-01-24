@@ -23,6 +23,7 @@ import weekOfYear from 'dayjs/plugin/weekOfYear'
 import { useAllPairData } from './PairData'
 import { useTokenChartDataCombined } from './TokenData'
 import { useNetworksData } from './NetworkData'
+import { FACTORIES } from '../constants/networks'
 const UPDATE = 'UPDATE'
 const UPDATE_TXNS = 'UPDATE_TXNS'
 const UPDATE_CHART = 'UPDATE_CHART'
@@ -241,11 +242,11 @@ async function getGlobalData(ethPrice, oldEthPrice, activeNetwork) {
       utcTwoDaysBack,
       utcOneWeekBack,
       utcTwoWeeksBack,
-    ])
+    ], 500, activeNetwork)
 
     // fetch the global data
     let result = await client(activeNetwork.client).query({
-      query: GLOBAL_DATA(),
+      query: GLOBAL_DATA(undefined, FACTORIES[activeNetwork.id]),
       fetchPolicy: 'cache-first',
     })
     data = result.data.uniswapFactories[0]
@@ -478,7 +479,7 @@ const getEthPrice = async (activeNetwork) => {
   let priceChangeETH = 0
 
   try {
-    let oneDayBlock = await getBlockFromTimestamp(utcOneDayBack)
+    let oneDayBlock = await getBlockFromTimestamp(utcOneDayBack, activeNetwork)
     let result = await client(activeNetwork.client).query({
       query: ETH_PRICE(),
       fetchPolicy: 'cache-first',

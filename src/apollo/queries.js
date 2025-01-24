@@ -442,11 +442,11 @@ export const GLOBAL_CHART = gql`
   }
 `
 
-export const GLOBAL_DATA = (block) => {
+export const GLOBAL_DATA = (block, factoryAddress) => {
   const queryString = ` query uniswapFactories {
       uniswapFactories(
        ${block ? `block: { number: ${block}}` : ``} 
-       where: { id: "${FACTORY_ADDRESS}" }) {
+       where: { id: "${factoryAddress}" }) {
         id
         totalVolumeUSD
         totalVolumeETH

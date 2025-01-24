@@ -47,9 +47,11 @@ export const stakingClient = new ApolloClient({
   shouldBatch: true,
 })
 
-export const blockClient = new ApolloClient({
-  link: new HttpLink({
-    uri: 'https://graph-node.internal.reservoir.tools/subgraphs/name/zero/blocks-subgraph',
-  }),
-  cache: new InMemoryCache(),
-})
+export function blockClient(url) {
+  return new ApolloClient({
+    link: new HttpLink({
+      uri: url ?? getSubgraphLink('zero', false),
+    }),
+    cache: new InMemoryCache(),
+  })
+}

@@ -1,10 +1,10 @@
 import React, { createContext, useContext, useReducer, useMemo, useCallback } from 'react'
-import { NETWORKS_LIST, ZeroNetworkNetworkInfo } from '../constants/networks'
+import { AbstractTestnetNetworkInfo, NETWORKS_LIST, ZeroNetworkNetworkInfo } from '../constants/networks'
 
 const UPDATE_CHAIN = 'UPDATE_CHAIN'
 
 const INITIAL_STATE = {
-  activeNetwork: ZeroNetworkNetworkInfo,
+  activeNetwork: AbstractTestnetNetworkInfo,
 }
 
 const NetworkDataContext = createContext()

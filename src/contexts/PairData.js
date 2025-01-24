@@ -185,7 +185,7 @@ export default function Provider({ children }) {
 
 async function getBulkPairData(pairList, ethPrice, activeNetwork) {
   const [t1, t2, tWeek] = getTimestampsForChanges()
-  let [{ number: b1 }, { number: b2 }, { number: bWeek }] = await getBlocksFromTimestamps([t1, t2, tWeek])
+  let [{ number: b1 }, { number: b2 }, { number: bWeek }] = await getBlocksFromTimestamps([t1, t2, tWeek], 500, activeNetwork)
 
   try {
     let current = await client(activeNetwork.client).query({
@@ -405,7 +405,7 @@ const getPairChartData = async (pairAddress, activeNetwork) => {
   return data
 }
 
-const getHourlyRateData = async (pairAddress, startTime, latestBlock) => {
+const getHourlyRateData = async (pairAddress, startTime, latestBlock, activeNetwork) => {
   try {
     const utcEndTime = dayjs.utc()
     let time = startTime
@@ -425,7 +425,7 @@ const getHourlyRateData = async (pairAddress, startTime, latestBlock) => {
     // once you have all the timestamps, get the blocks for each timestamp in a bulk query
     let blocks
 
-    blocks = await getBlocksFromTimestamps(timestamps, 100)
+    blocks = await getBlocksFromTimestamps(timestamps, 100, activeNetwork)
 
     // catch failing case
     if (!blocks || blocks?.length === 0) {
@@ -437,7 +437,7 @@ const getHourlyRateData = async (pairAddress, startTime, latestBlock) => {
         return parseFloat(b.number) <= parseFloat(latestBlock)
       })
     }
-    const localClient = client()
+    const localClient = client(activeNetwork.client)
     const result = await splitQuery(HOURLY_PAIR_RATES, localClient, [pairAddress], blocks, 100)
 
     // format token ETH price results
@@ -510,6 +510,9 @@ export function useHourlyRateData(pairAddress, timeWindow) {
   const [state, { updateHourlyData }] = usePairDataContext()
   const chartData = state?.[pairAddress]?.hourlyData?.[timeWindow]
   const [latestBlock] = useLatestBlocks()
+  const [activeNetwork,] = useNetworksData()
+
+  console.log({ latestBlock })
 
   useEffect(() => {
     const currentTime = dayjs.utc()
@@ -518,7 +521,7 @@ export function useHourlyRateData(pairAddress, timeWindow) {
       timeWindow === timeframeOptions.ALL_TIME ? 1589760000 : currentTime.subtract(1, windowSize).startOf('hour').unix()
 
     async function fetch() {
-      let data = await getHourlyRateData(pairAddress, startTime, latestBlock)
+      let data = await getHourlyRateData(pairAddress, startTime, latestBlock, activeNetwork)
       updateHourlyData(pairAddress, data, timeWindow)
     }
     if (!chartData) {
