@@ -1,7 +1,7 @@
-export const BLOCK_EXPLORER_URL = 'https://sepolia.abscan.org/' //TEMP
-export const BLOCK_EXPLORER_NAME = 'Abstract Block Explorer'
+export const BLOCK_EXPLORER_URL = 'https://cyberscan.co'
+export const BLOCK_EXPLORER_NAME = 'Cyber Blockchain Explorer'
 
-export const FACTORY_ADDRESS = '0xcD87b21B627cB2d695FBc2101cf64F8007F25E07'
+export const FACTORY_ADDRESS = '0x8AdDa31FE63696Ac64DED7D0Ea208102b1358c44'
 
 export const BUNDLE_ID = '1'
 
