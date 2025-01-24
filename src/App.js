@@ -101,8 +101,6 @@ const Decorator = styled.span`
 const LayoutWrapper = ({ children, savedOpen, setSavedOpen }) => {
   const [activeNetwork, updateActiveNetwork] = useNetworksData()
   const { networkID } = useParams()
-
-  console.log({ activeNetwork })
   useEffect(() => {
     if (!networkID) {
       updateActiveNetwork(ZeroNetworkNetworkInfo)
@@ -136,23 +134,6 @@ function App() {
   const globalData = useGlobalData()
   const globalChartData = useGlobalChartData()
   const [latestBlock, headBlock] = useLatestBlocks()
-
-
-
-  // const location = useLocation()
-  // const [activeNetwork, setActiveNetwork] = useActiveNetworkVersion()
-
-  // useEffect(() => {
-  //   if (location.pathname === '/') {
-  //     setActiveNetwork(ZeroNetworkNetworkInfo)
-  //   } else {
-  //     SUPPORTED_NETWORK_VERSIONS.map((n) => {
-  //       if (location.pathname.includes(n.route.toLocaleLowerCase())) {
-  //         setActiveNetwork(n)
-  //       }
-  //     })
-  //   }
-  // }, [location.pathname, setActiveNetwork])
 
   // show warning
   const showWarning = headBlock && latestBlock ? headBlock - latestBlock > BLOCK_DIFFERENCE_THRESHOLD : false

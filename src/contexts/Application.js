@@ -3,8 +3,11 @@ import { timeframeOptions, SUPPORTED_LIST_URLS__NO_ENS } from '../constants'
 import dayjs from 'dayjs'
 import utc from 'dayjs/plugin/utc'
 import getTokenList from '../utils/tokenLists'
-import { healthClient } from '../apollo/client'
-import { SUBGRAPH_HEALTH } from '../apollo/queries'
+import { client } from '../apollo/client'
+import { SUBGRAPH_LATEST_BLOCK } from '../apollo/queries'
+import { useNetworksData } from './NetworkData'
+import { START_BLOCKS } from '../constants/networks'
+import gql from 'graphql-tag'
 dayjs.extend(utc)
 
 const UPDATE = 'UPDATE'
@@ -52,18 +55,24 @@ function reducer(state, { type, payload }) {
     }
 
     case UPDATE_LATEST_BLOCK: {
-      const { block } = payload
+      const { block, chainId } = payload
       return {
         ...state,
-        [LATEST_BLOCK]: block,
+        [LATEST_BLOCK]: {
+          ...state[LATEST_BLOCK],
+          [chainId]: block,
+        },
       }
     }
 
     case UPDATE_HEAD_BLOCK: {
-      const { block } = payload
+      const { block, chainId } = payload
       return {
         ...state,
-        [HEAD_BLOCK]: block,
+        [HEAD_BLOCK]: {
+          ...state[HEAD_BLOCK],
+          [chainId]: block,
+        },
       }
     }
 
@@ -126,20 +135,22 @@ export default function Provider({ children }) {
     })
   }, [])
 
-  const updateLatestBlock = useCallback((block) => {
+  const updateLatestBlock = useCallback((block, chainId) => {
     dispatch({
       type: UPDATE_LATEST_BLOCK,
       payload: {
         block,
+        chainId,
       },
     })
   }, [])
 
-  const updateHeadBlock = useCallback((block) => {
+  const updateHeadBlock = useCallback((block, chainId) => {
     dispatch({
       type: UPDATE_HEAD_BLOCK,
       payload: {
         block,
+        chainId,
       },
     })
   }, [])
@@ -168,32 +179,38 @@ export default function Provider({ children }) {
 
 export function useLatestBlocks() {
   const [state, { updateLatestBlock, updateHeadBlock }] = useApplicationContext()
+  const [activeNetwork] = useNetworksData()
 
-  const latestBlock = state?.[LATEST_BLOCK]
-  const headBlock = state?.[HEAD_BLOCK]
+  const latestBlock = state?.[LATEST_BLOCK]?.[activeNetwork.chainId]
+  const headBlock = state?.[HEAD_BLOCK]?.[activeNetwork.chainId]
 
   useEffect(() => {
     async function fetch() {
-      healthClient
-        .query({
-          query: SUBGRAPH_HEALTH,
-        })
-        .then((res) => {
-          const syncedBlock = res.data.indexingStatusForCurrentVersion.chains[0].latestBlock.number
-          const headBlock = res.data.indexingStatusForCurrentVersion.chains[0].chainHeadBlock.number
-          if (syncedBlock && headBlock) {
-            updateLatestBlock(syncedBlock)
-            updateHeadBlock(headBlock)
-          }
-        })
-        .catch((e) => {
-          console.log(e)
-        })
+      const res = await client(activeNetwork.client).query({
+        query: SUBGRAPH_LATEST_BLOCK,
+      })
+
+      const latestBlock = res.data._meta.block.number
+
+      if (latestBlock) {
+        updateLatestBlock(latestBlock, activeNetwork.chainId)
+
+      }
+
+
+    }
+    async function assignStartBlock() {
+      updateHeadBlock(START_BLOCKS[activeNetwork.id], activeNetwork.chainId)
     }
     if (!latestBlock) {
       fetch()
     }
-  }, [latestBlock, updateHeadBlock, updateLatestBlock])
+
+    if (!headBlock) {
+      assignStartBlock()
+    }
+
+  }, [latestBlock, updateHeadBlock, updateLatestBlock, headBlock, activeNetwork])
 
   return [latestBlock, headBlock]
 }

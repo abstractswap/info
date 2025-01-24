@@ -9,7 +9,7 @@ const INITIAL_STATE = {
 
 const NetworkDataContext = createContext()
 
-function useNetworksDataContext() {
+export function useNetworksDataContext() {
   return useContext(NetworkDataContext)
 }
 
@@ -60,5 +60,5 @@ export default function Provider({ children }) {
 
 export function useNetworksData() {
   const [{ activeNetwork }, { updateActiveNetwork }] = useNetworksDataContext()
-  return [activeNetwork ?? NETWORKS_LIST[0], updateActiveNetwork]
+  return [activeNetwork ?? ZeroNetworkNetworkInfo, updateActiveNetwork]
 }

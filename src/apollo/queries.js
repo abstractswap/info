@@ -18,6 +18,16 @@ export const SUBGRAPH_HEALTH = gql`
   }
 `
 
+export const SUBGRAPH_LATEST_BLOCK = gql`
+  query block_number {
+    _meta {
+      block {
+        number
+      }
+    }
+  }
+`
+
 export const V1_DATA_QUERY = gql`
   query uniswap($date: Int!, $date2: Int!) {
     current: uniswap(id: "1") {
@@ -64,9 +74,8 @@ export const GET_BLOCK = gql`
 export const GET_BLOCKS = (timestamps) => {
   let queryString = 'query blocks {'
   queryString += timestamps.map((timestamp) => {
-    return `t${timestamp}:blocks(first: 1, orderBy: timestamp, orderDirection: desc, where: { timestamp_gt: ${timestamp}, timestamp_lt: ${
-      timestamp + 600
-    } }) {
+    return `t${timestamp}:blocks(first: 1, orderBy: timestamp, orderDirection: desc, where: { timestamp_gt: ${timestamp}, timestamp_lt: ${timestamp + 600
+      } }) {
       number
     }`
   })

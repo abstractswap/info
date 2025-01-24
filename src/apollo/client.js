@@ -12,7 +12,6 @@ import { getSubgraphLink } from '../constants/networks'
 // })
 
 export function client(url) {
-  console.log("fetching " + url)
   return new ApolloClient({
     link: new HttpLink({
       uri: url ?? getSubgraphLink('zero'),

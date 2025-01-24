@@ -227,8 +227,6 @@ async function getGlobalData(ethPrice, oldEthPrice, activeNetwork) {
   let oneDayData = {}
   let twoDayData = {}
 
-  console.log({ activeNetwork })
-
   try {
     // get timestamps for the days
     const utcCurrentTime = dayjs()
@@ -567,13 +565,13 @@ export function useGlobalData() {
   const [state, { update, updateAllPairsInUniswap, updateAllTokensInUniswap }] = useGlobalDataContext()
   const [ethPrice, oldEthPrice] = useEthPrice()
 
+  const [currentNetwork, setCurrentNetwork] = useState()
+
   const data = state?.globalData
 
   // const combinedVolume = useTokenDataCombined(offsetVolumes)
   const [activeNetwork,] = useNetworksData()
 
-  console.log("and in global data?")
-  console.log({ activeNetwork })
   useEffect(() => {
     async function fetchData() {
       let globalData = await getGlobalData(ethPrice, oldEthPrice, activeNetwork)
@@ -586,8 +584,10 @@ export function useGlobalData() {
       let allTokens = await getAllTokensOnUniswap(activeNetwork)
       updateAllTokensInUniswap(allTokens)
     }
-    if (!data && ethPrice && oldEthPrice) {
+
+    if ((!data && ethPrice && oldEthPrice) || currentNetwork !== activeNetwork) {
       fetchData()
+      setCurrentNetwork(activeNetwork)
     }
   }, [ethPrice, oldEthPrice, update, data, updateAllPairsInUniswap, updateAllTokensInUniswap, activeNetwork])
 

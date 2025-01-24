@@ -11,6 +11,19 @@ export function getSubgraphLink(chainSlug, isV2 = true) {
     return `https://graph-node.internal.reservoir.tools/subgraphs/name/${chainSlug}/${isV2 ? 'v2' : 'blocks'}-subgraph`
 }
 
+
+export const START_BLOCKS = {
+    //ChainID : block
+    11124: 356725,
+    543210: 727,
+    60808: 5188280,
+    7560: 9567951,
+    360: 6022152,
+    690: 924516,
+    17069: 586081,
+    57073: 284117,
+}
+
 export const AbstractTestnetNetworkInfo = {
     chainId: 11124,
     id: 11124,
