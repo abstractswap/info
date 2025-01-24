@@ -1,7 +1,7 @@
 export const BLOCK_EXPLORER_URL = 'https://explorer.inkonchain.com/'
 export const BLOCK_EXPLORER_NAME = 'Ink Blockchain Explorer'
 
-export const FACTORY_ADDRESS = '0xfe57A6BA1951F69aE2Ed4abe23e0f095DF500C04'
+export const FACTORY_ADDRESS = '0xfe57a6ba1951f69ae2ed4abe23e0f095df500c04'
 
 export const BUNDLE_ID = '1'
 
