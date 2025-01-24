@@ -41,7 +41,7 @@ export default function TokenLogo({ address, header = false, size = '24px', ...r
     return (
       <Inline>
         <span {...rest} alt={''} style={{ fontSize: size }} role="img" aria-label="face">
-          🤔
+
         </span>
       </Inline>
     )
