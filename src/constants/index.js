@@ -1,7 +1,7 @@
-export const BLOCK_EXPLORER_URL = 'https://abscan.org/' //TEMP
-export const BLOCK_EXPLORER_NAME = 'Abstract Block Explorer'
+export const BLOCK_EXPLORER_URL = 'https://explorer.mode.network'
+export const BLOCK_EXPLORER_NAME = 'Mode Block Explorer'
 
-export const FACTORY_ADDRESS = '0x566d7510dee58360a64c9827257cf6d0dc43985e'
+export const FACTORY_ADDRESS = '0x79ABbfdf20fc6DD0c51693bF9A481F7351A70Fd2'
 
 export const BUNDLE_ID = '1'
 
